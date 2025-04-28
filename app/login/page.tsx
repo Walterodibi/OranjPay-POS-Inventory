@@ -16,6 +16,28 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
+// Testimonial data
+const testimonials = [
+  {
+    quote:
+      "OranjPay has transformed how we handle payments. The system is intuitive, reliable, and has significantly improved our checkout efficiency.",
+    author: "Sarah Johnson",
+    role: "Retail Store Manager",
+  },
+  {
+    quote:
+      "Since implementing OranjPay, our transaction processing time has decreased by 40%. The analytics dashboard gives us valuable insights into our business performance.",
+    author: "Michael Chen",
+    role: "Restaurant Owner",
+  },
+  {
+    quote:
+      "The customer support team at OranjPay is exceptional. They helped us customize the system to our specific needs and are always available when we need assistance.",
+    author: "Priya Sharma",
+    role: "Boutique Manager",
+  },
+]
+
 export default function LoginPage() {
   const router = useRouter()
   const { user, login, isLoading } = useAuth()
@@ -24,6 +46,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loginInProgress, setLoginInProgress] = useState(false)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   // Redirect if already logged in
   useEffect(() => {
@@ -36,8 +60,21 @@ export default function LoginPage() {
     }
   }, [user, router])
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+  // Rotate testimonials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+        setIsAnimating(false)
+      }, 500) // Half the interval for the animation
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     setError("")
     setLoginInProgress(true)
 
@@ -55,7 +92,7 @@ export default function LoginPage() {
     }
   }
 
-  const handleDemoLogin = (role: string) => {
+  const handleDemoLogin = async (role: string) => {
     if (role === "admin") {
       setEmail("admin@oranjpay.com")
       setPassword("admin123")
@@ -63,29 +100,58 @@ export default function LoginPage() {
       setEmail("cashier@oranjpay.com")
       setPassword("cashier123")
     }
+
+    // Wait for state to update
+    setTimeout(() => {
+      handleLogin()
+    }, 10)
   }
 
   return (
-    <div className="container relative flex min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="container relative flex min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 overflow-hidden">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-600 to-orange-600" />
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-animation" />
+
+        {/* Glassmorphism overlay */}
+        <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+
+        {/* Content */}
         <div className="relative z-20 flex items-center text-lg font-medium">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/images/OranjPay-White.png" alt="OranjPay" width={150} height={35} />
           </Link>
         </div>
-        <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
-            <p className="text-lg">
-              "OranjPay has transformed how we handle payments. The system is intuitive, reliable, and has significantly
-              improved our checkout efficiency."
-            </p>
-            <footer className="text-sm">Sarah Johnson - Retail Store Manager</footer>
-          </blockquote>
+
+        {/* Testimonials stack */}
+        <div className="relative z-20 mt-auto h-[200px]">
+          <div className="testimonial-stack">
+            {testimonials.map((testimonial, index) => (
+              <blockquote
+                key={index}
+                className={`testimonial-card backdrop-blur-sm bg-white/10 p-6 rounded-xl border border-white/20 absolute w-full transition-all duration-700 ease-bezier ${
+                  index === currentTestimonial
+                    ? "opacity-100 translate-y-0 z-30"
+                    : index === (currentTestimonial + 1) % testimonials.length
+                      ? "opacity-60 translate-y-4 z-20 scale-[0.97]"
+                      : "opacity-30 translate-y-8 z-10 scale-[0.94]"
+                } ${isAnimating ? "animate-testimonial-out" : ""}`}
+              >
+                <p className="text-lg">{testimonial.quote}</p>
+                <footer className="text-sm mt-2">
+                  {testimonial.author} - {testimonial.role}
+                </footer>
+              </blockquote>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+      <div className="lg:p-8 relative">
+        {/* Small animated gradient elements for the right side */}
+        <div className="absolute top-[-50px] right-[-50px] w-[200px] h-[200px] rounded-full bg-gradient-animation opacity-10 blur-xl"></div>
+        <div className="absolute bottom-[-50px] left-[-50px] w-[200px] h-[200px] rounded-full bg-gradient-animation opacity-10 blur-xl"></div>
+
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] relative z-10">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">Sign in to your account</h1>
             <p className="text-sm text-muted-foreground">Enter your email below to access your account</p>
@@ -100,12 +166,12 @@ export default function LoginPage() {
           )}
 
           <Tabs defaultValue="demo" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2 glassmorphism-light">
               <TabsTrigger value="login">Sign In</TabsTrigger>
               <TabsTrigger value="demo">Demo Accounts</TabsTrigger>
             </TabsList>
             <TabsContent value="login">
-              <Card>
+              <Card className="glassmorphism-card border-0">
                 <form onSubmit={handleLogin}>
                   <CardHeader>
                     <CardTitle>Account Login</CardTitle>
@@ -121,6 +187,7 @@ export default function LoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        className="glassmorphism-input"
                       />
                     </div>
                     <div className="space-y-2">
@@ -137,6 +204,7 @@ export default function LoginPage() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           required
+                          className="glassmorphism-input"
                         />
                         <button
                           type="button"
@@ -151,7 +219,7 @@ export default function LoginPage() {
                   <CardFooter>
                     <Button
                       type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700"
+                      className="w-full bg-purple-600 hover:bg-purple-700 glassmorphism-button"
                       disabled={loginInProgress || isLoading}
                     >
                       {loginInProgress ? "Signing in..." : "Sign In"}
@@ -161,15 +229,15 @@ export default function LoginPage() {
               </Card>
             </TabsContent>
             <TabsContent value="demo">
-              <Card>
+              <Card className="glassmorphism-card border-0">
                 <CardHeader>
                   <CardTitle>Demo Accounts</CardTitle>
                   <CardDescription>Use these demo accounts to explore the system</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="rounded-lg border p-3">
+                  <div className="rounded-lg border border-white/20 p-3 glassmorphism-panel">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100/80 text-purple-600 backdrop-blur-sm">
                         <LockKeyhole size={20} />
                       </div>
                       <div>
@@ -186,16 +254,16 @@ export default function LoginPage() {
                       </div>
                     </div>
                     <Button
-                      className="mt-3 w-full bg-purple-600 hover:bg-purple-700"
+                      className="mt-3 w-full bg-purple-600/90 hover:bg-purple-700 glassmorphism-button"
                       size="sm"
                       onClick={() => handleDemoLogin("admin")}
                     >
                       Use Admin Account
                     </Button>
                   </div>
-                  <div className="rounded-lg border p-3">
+                  <div className="rounded-lg border border-white/20 p-3 glassmorphism-panel">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100/80 text-orange-600 backdrop-blur-sm">
                         <LockKeyhole size={20} />
                       </div>
                       <div>
@@ -212,7 +280,7 @@ export default function LoginPage() {
                       </div>
                     </div>
                     <Button
-                      className="mt-3 w-full bg-orange-600 hover:bg-orange-700"
+                      className="mt-3 w-full bg-orange-600/90 hover:bg-orange-700 glassmorphism-button"
                       size="sm"
                       onClick={() => handleDemoLogin("cashier")}
                     >
@@ -220,17 +288,6 @@ export default function LoginPage() {
                     </Button>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    variant="outline"
-                    onClick={(e) => handleLogin(e as unknown as React.FormEvent)}
-                    disabled={!email || !password || loginInProgress || isLoading}
-                  >
-                    {loginInProgress ? "Signing in..." : "Sign In with Selected Account"}
-                  </Button>
-                </CardFooter>
               </Card>
             </TabsContent>
           </Tabs>

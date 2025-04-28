@@ -1,160 +1,113 @@
 "use client"
 
 import type React from "react"
+import { createContext, useContext, useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 
-import { createContext, useContext, useEffect, useState } from "react"
-import { useRouter, usePathname } from "next/navigation"
-
-type User = {
+// Define user types
+export interface User {
+  id: string
   name: string
   email: string
   role: "admin" | "cashier"
-} | null
+  avatar?: string
+}
 
-type AuthContextType = {
-  user: User
+// Mock users for demo
+const mockUsers = {
+  admin: {
+    id: "admin-1",
+    name: "Admin User",
+    email: "admin@oranjpay.com",
+    role: "admin",
+    avatar: "/placeholder.svg?height=32&width=32",
+  },
+  cashier: {
+    id: "cashier-1",
+    name: "Cashier User",
+    email: "cashier@oranjpay.com",
+    role: "cashier",
+    avatar: "/placeholder.svg?height=32&width=32",
+  },
+}
+
+// Auth context type
+interface AuthContextType {
+  user: User | null
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void
   isLoading: boolean
 }
 
-// Create a default context value to avoid the "must be used within a provider" error
-const defaultContextValue: AuthContextType = {
-  user: null,
-  login: async () => false,
-  logout: () => {},
-  isLoading: true,
-}
+// Create context
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const AuthContext = createContext<AuthContextType>(defaultContextValue)
-
+// Auth provider component
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const pathname = usePathname()
 
-  // Demo credentials for easy access
-  const demoCredentials = {
-    admin: {
-      email: "admin@oranjpay.com",
-      password: "admin123",
-      name: "Admin User",
-    },
-    cashier: {
-      email: "cashier@oranjpay.com",
-      password: "cashier123",
-      name: "Cashier User",
-    },
-  }
-
+  // Check for existing session on mount
   useEffect(() => {
-    // Check if user is logged in
-    const checkAuth = () => {
+    const storedUser = localStorage.getItem("oranjpay-user")
+    if (storedUser) {
       try {
-        const storedUser = localStorage.getItem("oranjpay-user")
-        if (storedUser) {
-          setUser(JSON.parse(storedUser))
-        }
+        const parsedUser = JSON.parse(storedUser)
+        setUser(parsedUser)
       } catch (error) {
-        console.error("Error checking authentication:", error)
-      } finally {
-        setIsLoading(false)
+        console.error("Failed to parse stored user:", error)
+        localStorage.removeItem("oranjpay-user")
       }
     }
-
-    // Only run on client side
-    if (typeof window !== "undefined") {
-      checkAuth()
-    } else {
-      setIsLoading(false)
-    }
+    setIsLoading(false)
   }, [])
 
-  useEffect(() => {
-    // Handle route protection
-    if (!isLoading) {
-      // Public routes that don't require authentication
-      const publicRoutes = ["/", "/login"]
-      const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith("/_next")
-
-      // If not logged in and not on a public route, redirect to login
-      if (!user && !isPublicRoute) {
-        router.push("/login")
-      }
-
-      // If logged in and on login page, redirect to appropriate dashboard
-      if (user && pathname === "/login") {
-        if (user.role === "admin") {
-          router.push("/admin/dashboard")
-        } else {
-          router.push("/cashier")
-        }
-      }
-
-      // Role-based route protection
-      if (user) {
-        if (user.role === "admin" && pathname.startsWith("/cashier")) {
-          router.push("/admin/dashboard")
-        } else if (user.role === "cashier" && pathname.startsWith("/admin")) {
-          router.push("/cashier")
-        }
-      }
-    }
-  }, [user, isLoading, pathname, router])
-
+  // Login function
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true)
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 800))
 
-      // Check against demo credentials
-      if (email === demoCredentials.admin.email && password === demoCredentials.admin.password) {
-        const userData = { name: demoCredentials.admin.name, email, role: "admin" as const }
-        setUser(userData)
-        localStorage.setItem("oranjpay-user", JSON.stringify(userData))
-        return true
-      } else if (email === demoCredentials.cashier.email && password === demoCredentials.cashier.password) {
-        const userData = { name: demoCredentials.cashier.name, email, role: "cashier" as const }
-        setUser(userData)
-        localStorage.setItem("oranjpay-user", JSON.stringify(userData))
-        return true
-      }
-
-      return false
-    } catch (error) {
-      console.error("Login error:", error)
-      return false
-    } finally {
+    // Check admin credentials
+    if (email === "admin@oranjpay.com" && password === "admin123") {
+      const adminUser = mockUsers.admin
+      setUser(adminUser)
+      localStorage.setItem("oranjpay-user", JSON.stringify(adminUser))
+      router.push("/admin/dashboard")
       setIsLoading(false)
+      return true
     }
+
+    // Check cashier credentials
+    if (email === "cashier@oranjpay.com" && password === "cashier123") {
+      const cashierUser = mockUsers.cashier
+      setUser(cashierUser)
+      localStorage.setItem("oranjpay-user", JSON.stringify(cashierUser))
+      router.push("/cashier")
+      setIsLoading(false)
+      return true
+    }
+
+    setIsLoading(false)
+    return false
   }
 
+  // Logout function
   const logout = () => {
-    try {
-      setUser(null)
-      localStorage.removeItem("oranjpay-user")
-      router.push("/login")
-    } catch (error) {
-      console.error("Logout error:", error)
-    }
+    setUser(null)
+    localStorage.removeItem("oranjpay-user")
+    router.push("/login")
   }
 
-  const value = {
-    user,
-    login,
-    logout,
-    isLoading,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
 }
 
+// Custom hook to use auth context
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider")
   }
   return context

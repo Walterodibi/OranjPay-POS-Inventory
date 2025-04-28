@@ -70,7 +70,7 @@ export function LandingPage() {
       </header>
       <main className="flex-1">
         <section className="bg-white py-12 dark:bg-gray-950 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="inline-block rounded-lg bg-purple-100 px-3 py-1 text-sm text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
@@ -121,7 +121,7 @@ export function LandingPage() {
         </section>
 
         <section className="border-t bg-gray-50 py-12 dark:bg-gray-900/50 md:py-16">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
               <Image
                 src="/placeholder.svg?height=40&width=120"
@@ -163,7 +163,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-white py-12 dark:bg-gray-950 md:py-24 lg:py-32" id="features">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
               <div className="inline-block rounded-lg bg-purple-100 px-3 py-1 text-sm text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
                 Boost your business
@@ -181,7 +181,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-white py-12 dark:bg-gray-950 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-4">
                 <h3 className="text-2xl font-bold tracking-tighter sm:text-3xl">Optimize your checkout flow</h3>
@@ -249,7 +249,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-white py-12 dark:bg-gray-950 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-4">
                 <h3 className="text-2xl font-bold tracking-tighter sm:text-3xl">
@@ -298,7 +298,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-white py-12 dark:bg-gray-950 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
               <div className="flex flex-col justify-center space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
@@ -327,7 +327,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-gray-50 py-12 dark:bg-gray-900/50 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
               <div className="inline-block rounded-lg bg-purple-100 px-3 py-1 text-sm text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
                 Why OranjPay
@@ -378,7 +378,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-white py-12 dark:bg-gray-950 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
                 Integrate with all the systems you already use
@@ -395,7 +395,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-gray-50 py-12 dark:bg-gray-900/50 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="inline-block rounded-lg bg-purple-100 px-3 py-1 text-sm text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
@@ -460,7 +460,7 @@ export function LandingPage() {
         </section>
 
         <section className="bg-purple-600 py-12 text-white md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container mx-auto max-w-6xl px-4 md:px-6">
             <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Ready to transform your payment experience?
@@ -483,7 +483,7 @@ export function LandingPage() {
         </section>
       </main>
       <footer className="border-t bg-white py-12 dark:bg-gray-950 md:py-16">
-        <div className="container px-4 md:px-6">
+        <div className="container mx-auto max-w-6xl px-4 md:px-6">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <Link href="/" className="flex items-center gap-2">

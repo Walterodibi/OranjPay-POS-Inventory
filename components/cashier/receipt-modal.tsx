@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Download, Printer, Share } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { StripeButton } from "@/components/ui/stripe-button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
@@ -104,11 +104,11 @@ export function ReceiptModal({ isOpen, onClose, cart, subtotal, tax, total }: Re
           </div>
         </div>
         <DialogFooter className="flex-row justify-between">
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
+          <StripeButton variant="outline" size="sm" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
             <span>Save</span>
-          </Button>
-          <Button
+          </StripeButton>
+          <StripeButton
             variant="outline"
             size="sm"
             className="flex items-center gap-2"
@@ -133,16 +133,16 @@ export function ReceiptModal({ isOpen, onClose, cart, subtotal, tax, total }: Re
                 <span>Print</span>
               </>
             )}
-          </Button>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
+          </StripeButton>
+          <StripeButton variant="outline" size="sm" className="flex items-center gap-2">
             <Share className="h-4 w-4" />
             <span>Share</span>
-          </Button>
+          </StripeButton>
         </DialogFooter>
         <div className="flex justify-center">
-          <Button onClick={onClose} className="bg-purple-600 hover:bg-purple-700">
+          <StripeButton onClick={onClose} className="bg-[#635bff] hover:bg-[#635bff]/90">
             New Transaction
-          </Button>
+          </StripeButton>
         </div>
       </DialogContent>
     </Dialog>

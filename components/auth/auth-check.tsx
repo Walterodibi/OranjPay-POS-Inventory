@@ -2,40 +2,45 @@
 
 import type React from "react"
 
-import { useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 
 export function AuthCheck({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth()
   const router = useRouter()
-  const pathname = usePathname()
+  const [isAuthorized, setIsAuthorized] = useState(false)
 
   useEffect(() => {
     if (!isLoading) {
-      // Public routes that don't require authentication
-      const publicRoutes = ["/", "/login"]
-      const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith("/_next")
-
-      // If not logged in and not on a public route, redirect to login
-      if (!user && !isPublicRoute) {
+      if (!user) {
         router.push("/login")
+        return
       }
-
-      // Role-based route protection
-      if (user) {
-        if (user.role === "admin" && pathname.startsWith("/cashier")) {
-          router.push("/admin/dashboard")
-        } else if (user.role === "cashier" && pathname.startsWith("/admin")) {
-          router.push("/cashier")
-        }
-      }
+      setIsAuthorized(true)
     }
-  }, [user, isLoading, pathname, router])
+  }, [user, isLoading, router])
 
-  // Show nothing while checking authentication
   if (isLoading) {
-    return null
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex flex-col items-center gap-2">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-sm text-muted-foreground">Checking authorization...</p>
+        </div>
+      </div>
+    )
   }
 
   return <>{children}</>

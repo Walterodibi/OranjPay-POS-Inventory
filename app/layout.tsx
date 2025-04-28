@@ -4,14 +4,15 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/contexts/auth-context"
+import { Toaster } from "@/components/ui/use-toast"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "OranjPay - Modern POS & Payment Processing System",
+  title: "OranjPay by Zyntraq Technology",
   description: "A complete payments platform for modern retail and e-commerce businesses",
   icons: {
-    icon: "/images/OranjPay-Favicon-Circle.png",
+    icon: "/images/favicon.png",
   },
     generator: 'v0.dev'
 }
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <AuthProvider>{children}</AuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
