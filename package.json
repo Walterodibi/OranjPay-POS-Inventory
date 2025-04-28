@@ -65,7 +65,6 @@
     "@dnd-kit/utilities": "latest",
     "@radix-ui/react-icons": "latest",
     "react-chartjs-2": "latest",
-    "tailwindcss": "latest",
     "@tailwindcss/container-queries": "latest"
   },
   "devDependencies": {
