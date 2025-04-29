@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   title: "OranjPay by Zyntraq Technology",
   description: "A complete payments platform for modern retail and e-commerce businesses",
   icons: {
-    icon: "/images/favicon.png",
+    icon: "/images/OranjPay-Favicon-Circle.png",
+    apple: "/images/OranjPay-Favicon-Circle.png",
   },
     generator: 'v0.dev'
 }
@@ -29,6 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/images/OranjPay-Favicon-Circle.png" sizes="any" />
+      </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", poppins.variable)}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <AuthProvider>{children}</AuthProvider>

@@ -10,11 +10,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
+import Image from "next/image"
 
 export default function CreateSingleProductPage() {
   const [productType, setProductType] = useState("product")
   const [hasVariants, setHasVariants] = useState("no")
   const [sellMode, setSellMode] = useState("yes")
+  const [sku, setSku] = useState("")
+  const [barcode, setBarcode] = useState("")
 
   return (
     <div className="container mx-auto py-6 max-w-5xl">
@@ -175,7 +178,7 @@ export default function CreateSingleProductPage() {
             <div className="flex flex-col items-center justify-center h-full">
               <div className="bg-orange-100 rounded-lg w-full h-[200px] flex flex-col items-center justify-center">
                 <div className="bg-white p-4 rounded-full mb-2">
-                  <img src="/placeholder.svg?height=40&width=40" alt="Placeholder" className="h-10 w-10" />
+                  <Image src="/placeholder.svg?height=40&width=40" alt="Placeholder" width={40} height={40} />
                 </div>
                 <Button variant="outline" className="bg-white">
                   <Upload className="h-4 w-4 mr-2" /> Add Product Images
@@ -187,7 +190,7 @@ export default function CreateSingleProductPage() {
               <Label htmlFor="sku" className="text-sm font-medium mb-1 block">
                 Product SKU
               </Label>
-              <Input id="sku" placeholder="Enter SKU" />
+              <Input id="sku" placeholder="Enter SKU" value={sku} onChange={(e) => setSku(e.target.value)} />
             </div>
 
             <div>
@@ -195,7 +198,12 @@ export default function CreateSingleProductPage() {
                 Scan Barcode
               </Label>
               <div className="relative">
-                <Input id="barcode" placeholder="Scan barcode" />
+                <Input
+                  id="barcode"
+                  placeholder="Scan barcode"
+                  value={barcode}
+                  onChange={(e) => setBarcode(e.target.value)}
+                />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="4" y="4" width="16" height="16" rx="2" stroke="#635BFF" strokeWidth="2" />
