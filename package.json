@@ -58,14 +58,16 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
     "zod": "latest",
-    "@dnd-kit/core": "latest",
     "chart.js": "latest",
+    "@dnd-kit/core": "latest",
+    "@emotion/is-prop-valid": "latest",
+    "@radix-ui/react-icons": "latest",
+    "react-chartjs-2": "latest",
     "@tanstack/react-table": "latest",
     "@dnd-kit/sortable": "latest",
     "@dnd-kit/utilities": "latest",
-    "@radix-ui/react-icons": "latest",
-    "react-chartjs-2": "latest",
-    "@tailwindcss/container-queries": "latest"
+    "framer-motion": "latest",
+    "qrcode.react": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

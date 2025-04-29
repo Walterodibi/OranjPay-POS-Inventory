@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Eye, EyeOff, LockKeyhole, AlertCircle } from "lucide-react"
+import { Eye, EyeOff, LockKeyhole, AlertCircle, Loader2 } from "lucide-react"
 
 import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
@@ -48,6 +48,8 @@ export default function LoginPage() {
   const [loginInProgress, setLoginInProgress] = useState(false)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [adminLoading, setAdminLoading] = useState(false)
+  const [cashierLoading, setCashierLoading] = useState(false)
 
   // Redirect if already logged in
   useEffect(() => {
@@ -93,18 +95,22 @@ export default function LoginPage() {
   }
 
   const handleDemoLogin = async (role: string) => {
-    if (role === "admin") {
-      setEmail("admin@oranjpay.com")
-      setPassword("admin123")
-    } else {
-      setEmail("cashier@oranjpay.com")
-      setPassword("cashier123")
+    try {
+      setError("")
+      if (role === "admin") {
+        setAdminLoading(true)
+        await login("admin@oranjpay.com", "admin123")
+      } else {
+        setCashierLoading(true)
+        await login("cashier@oranjpay.com", "cashier123")
+      }
+    } catch (error) {
+      setError("An error occurred during login. Please try again.")
+      console.error("Login error:", error)
+    } finally {
+      setAdminLoading(false)
+      setCashierLoading(false)
     }
-
-    // Wait for state to update
-    setTimeout(() => {
-      handleLogin()
-    }, 10)
   }
 
   return (
@@ -124,24 +130,51 @@ export default function LoginPage() {
         </div>
 
         {/* Testimonials stack */}
-        <div className="relative z-20 mt-auto h-[200px]">
-          <div className="testimonial-stack">
+        <div className="relative z-20 mt-auto h-[220px] flex items-center justify-center">
+          <div className="testimonial-stack w-full max-w-lg mx-auto">
             {testimonials.map((testimonial, index) => (
               <blockquote
                 key={index}
-                className={`testimonial-card backdrop-blur-sm bg-white/10 p-6 rounded-xl border border-white/20 absolute w-full transition-all duration-700 ease-bezier ${
+                className={`testimonial-card backdrop-blur-sm bg-white/10 p-6 rounded-xl border border-white/20 absolute w-full transition-all duration-700 ${
                   index === currentTestimonial
-                    ? "opacity-100 translate-y-0 z-30"
+                    ? "opacity-100 translate-y-0 z-30 scale-100"
                     : index === (currentTestimonial + 1) % testimonials.length
                       ? "opacity-60 translate-y-4 z-20 scale-[0.97]"
                       : "opacity-30 translate-y-8 z-10 scale-[0.94]"
                 } ${isAnimating ? "animate-testimonial-out" : ""}`}
               >
                 <p className="text-lg">{testimonial.quote}</p>
-                <footer className="text-sm mt-2">
-                  {testimonial.author} - {testimonial.role}
+                <footer className="text-sm mt-2 flex items-center">
+                  <div className="w-8 h-8 rounded-full bg-purple-500/50 mr-2 flex items-center justify-center text-white font-bold">
+                    {testimonial.author.charAt(0)}
+                  </div>
+                  <div>
+                    <span className="font-medium">{testimonial.author}</span>
+                    <span className="mx-1">•</span>
+                    <span className="text-white/80">{testimonial.role}</span>
+                  </div>
                 </footer>
               </blockquote>
+            ))}
+          </div>
+
+          {/* Testimonial indicators */}
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2 pb-4">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentTestimonial ? "bg-white scale-125" : "bg-white/40"
+                }`}
+                onClick={() => {
+                  setIsAnimating(true)
+                  setTimeout(() => {
+                    setCurrentTestimonial(index)
+                    setIsAnimating(false)
+                  }, 500)
+                }}
+                aria-label={`View testimonial ${index + 1}`}
+              />
             ))}
           </div>
         </div>
@@ -222,7 +255,14 @@ export default function LoginPage() {
                       className="w-full bg-purple-600 hover:bg-purple-700 glassmorphism-button"
                       disabled={loginInProgress || isLoading}
                     >
-                      {loginInProgress ? "Signing in..." : "Sign In"}
+                      {loginInProgress ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Signing in...
+                        </>
+                      ) : (
+                        "Sign In"
+                      )}
                     </Button>
                   </CardFooter>
                 </form>
@@ -257,8 +297,16 @@ export default function LoginPage() {
                       className="mt-3 w-full bg-purple-600/90 hover:bg-purple-700 glassmorphism-button"
                       size="sm"
                       onClick={() => handleDemoLogin("admin")}
+                      disabled={adminLoading || cashierLoading || isLoading}
                     >
-                      Use Admin Account
+                      {adminLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Signing in...
+                        </>
+                      ) : (
+                        "Use Admin Account"
+                      )}
                     </Button>
                   </div>
                   <div className="rounded-lg border border-white/20 p-3 glassmorphism-panel">
@@ -283,8 +331,16 @@ export default function LoginPage() {
                       className="mt-3 w-full bg-orange-600/90 hover:bg-orange-700 glassmorphism-button"
                       size="sm"
                       onClick={() => handleDemoLogin("cashier")}
+                      disabled={adminLoading || cashierLoading || isLoading}
                     >
-                      Use Cashier Account
+                      {cashierLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Signing in...
+                        </>
+                      ) : (
+                        "Use Cashier Account"
+                      )}
                     </Button>
                   </div>
                 </CardContent>

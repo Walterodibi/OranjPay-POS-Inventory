@@ -1,11 +1,5 @@
-import { LandingPage } from "@/components/landing-page"
-import { AuthInitializer } from "@/components/auth/auth-initializer"
+import NewHomepage from "@/components/new-homepage"
 
 export default function Home() {
-  return (
-    <>
-      <AuthInitializer />
-      <LandingPage />
-    </>
-  )
+  return <NewHomepage />
 }

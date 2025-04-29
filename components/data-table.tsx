@@ -268,15 +268,18 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
 }
 
 export function DataTable<TData, TValue>({
-  columns,
+  columns: columnsProp,
   data,
 }: {
-  columns: ColumnDef<TData, TValue>[]
+  columns?: ColumnDef<TData, TValue>[]
   data: TData[]
 }) {
+  // Use the provided columns or fall back to the default columns
+  const columnsToUse = columnsProp || (columns as unknown as ColumnDef<TData, TValue>[])
+
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsToUse,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

@@ -1,12 +1,35 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
+        sans: [
+          "var(--font-poppins)",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -15,7 +38,7 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#635BFF",
+          DEFAULT: "#635bff",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -23,8 +46,8 @@ module.exports = {
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
-          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -42,77 +65,37 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        chart: {
-          1: "hsl(var(--chart-1))",
-          2: "hsl(var(--chart-2))",
-          3: "hsl(var(--chart-3))",
-          4: "hsl(var(--chart-4))",
-          5: "hsl(var(--chart-5))",
-        },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-        // Brand colors
-        purple: {
-          50: "hsl(267, 75%, 95%)",
-          100: "hsl(267, 75%, 90%)",
-          200: "hsl(267, 75%, 80%)",
-          300: "hsl(267, 75%, 70%)",
-          400: "hsl(267, 75%, 60%)",
-          500: "#635BFF",
-          600: "hsl(267, 75%, 40%)",
-          700: "hsl(267, 75%, 30%)",
-          800: "hsl(267, 75%, 20%)",
-          900: "hsl(267, 75%, 10%)",
-          950: "hsl(267, 75%, 5%)",
-        },
-        orange: {
-          50: "hsl(24, 100%, 95%)",
-          100: "hsl(24, 100%, 90%)",
-          200: "hsl(24, 100%, 80%)",
-          300: "hsl(24, 100%, 70%)",
-          400: "hsl(24, 100%, 60%)",
-          500: "hsl(24, 100%, 50%)",
-          600: "hsl(24, 100%, 40%)",
-          700: "hsl(24, 100%, 30%)",
-          800: "hsl(24, 100%, 20%)",
-          900: "hsl(24, 100%, 10%)",
-          950: "hsl(24, 100%, 5%)",
-        },
       },
       borderRadius: {
-        xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
+          from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: 0 },
         },
-        "caret-blink": {
-          "0%,70%,100%": { opacity: "1" },
-          "20%,50%": { opacity: "0" },
+        "scroll-testimonial": {
+          "0%": { transform: "translateY(0%)" },
+          "100%": { transform: "translateY(-50%)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "caret-blink": "caret-blink 1.25s ease-out infinite",
+        "scroll-testimonial": "scroll-testimonial 25s cubic-bezier(0.65, 0, 0.35, 1) infinite",
+        float: "float 6s ease-in-out infinite",
       },
     },
   },
-  plugins: [require("@tailwindcss/container-queries")],
+  plugins: [require("tailwindcss-animate")],
 }
