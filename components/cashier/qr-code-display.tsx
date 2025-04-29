@@ -10,7 +10,7 @@ interface QRCodeDisplayProps {
   amount?: number
 }
 
-export function QRCodeDisplay({ value, size = 200, amount = 0 }: QRCodeDisplayProps) {
+export function QRCodeDisplay({ value, size = 300, amount = 0 }: QRCodeDisplayProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -36,15 +36,15 @@ export function QRCodeDisplay({ value, size = 200, amount = 0 }: QRCodeDisplayPr
         />
 
         {/* QR Code */}
-        <div className="p-4 bg-white rounded-lg">
+        <div className="p-8 bg-white rounded-lg shadow-lg">
           <QRCodeSVG value={value} size={size} />
         </div>
       </div>
 
       {amount > 0 && (
-        <div className="mt-4 text-center">
-          <p className="text-gray-500 text-sm">Amount</p>
-          <p className="text-2xl font-bold">₦{amount.toLocaleString()}</p>
+        <div className="mt-8 text-center">
+          <p className="text-gray-500 text-lg mb-2">Amount</p>
+          <p className="text-4xl font-bold">₦{amount.toLocaleString()}</p>
         </div>
       )}
     </div>
