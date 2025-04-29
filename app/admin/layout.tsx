@@ -1,21 +1,21 @@
-"use client"
-
 import type React from "react"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { AdminSidebar } from "@/components/admin/admin-sidebar"
+import { AdminHeader } from "@/components/admin/admin-header"
 import { AuthCheck } from "@/components/auth/auth-check"
-import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { RouteChangeProgressBar } from "@/components/ui/progress-bar"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
-
   return (
-    <AuthCheck requiredRole="admin">
-      <SidebarProvider defaultOpen={!isCollapsed} onOpenChange={(open) => setIsCollapsed(!open)}>
-        <div className="min-h-screen bg-[#f1f1f1]">
+    <AuthCheck>
+      <RouteChangeProgressBar />
+      <SidebarProvider>
+        <div className="flex min-h-screen">
           <AdminSidebar />
-          <div className={cn("transition-all duration-300", isCollapsed ? "ml-[70px]" : "ml-64")}>{children}</div>
+          <div className="flex-1 ml-[70px] lg:ml-64">
+            <AdminHeader />
+            <main className="p-6">{children}</main>
+          </div>
         </div>
       </SidebarProvider>
     </AuthCheck>

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
-import Image from "next/image"
 import { useAuth } from "@/contexts/auth-context"
 
 export function AuthPreloader() {
@@ -26,11 +25,7 @@ export function AuthPreloader() {
 
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center">
-      <div className="flex flex-col items-center">
-        <Image src="/images/OranjPay-Black.png" alt="OranjPay" width={200} height={50} className="mb-8" priority />
-        <Loader2 className="h-10 w-10 text-[#635BFF] animate-spin" />
-        <p className="mt-4 text-lg text-gray-600">{user ? "Redirecting to dashboard..." : "Loading..."}</p>
-      </div>
+      <Loader2 className="h-12 w-12 text-[#635BFF] animate-spin" />
     </div>
   )
 }
